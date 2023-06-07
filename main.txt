@@ -1,0 +1,67 @@
+import requests
+from bs4 import BeautifulSoup
+
+def check_url(url):
+    list_web=["englishpracticetest","engexam","study4"]
+
+    for i in list_web:
+        if (i in url):
+            return i
+    return False
+def engexam(url):
+    try:
+        a=requests.get(url).text.split('<source type="audio/mpeg" src="')[1].split('" />')[0]
+
+        print(a)
+    except:
+        print("ERROR URL")
+    print("")
+
+def englishpracticetest(url):
+    try:
+        a=requests.get(url)
+
+        b=BeautifulSoup(a.content,"html.parser").find_all("source",{"type":"audio/mpeg"})
+
+        for i in b:
+            i=str(i).split('<source src="')[1].split('" type=')[0]
+            print(i)
+        print("")
+    except:
+        print("ERROR URL")
+        print("")
+
+def study4(url):
+    try:
+        h={
+            "Cookie":"_gid=GA1.2.1114770079.1686153183; _gat_gtag_UA_147622171_7=1; _fbp=fb.1.1686153183028.1520899353; __cf_bm=WbSQgzC78Zd0auEJSnD1NI_AgD41FhhtWmnNyA6DvZc-1686153188-0-Ad5zzfE3z9+9vgw2NTaz4yCKtrDOOtUDzc6K3ATZdSwgWBnPDDcdtluF8woapZxblA==; _ym_uid=168615318484673869; _ym_d=1686153184; _ym_isad=2; _ym_visorc=b; csrftoken=d21y9owCStqlYQiw8zmkiaQwU0c8lVS2cjxmeyxiJtnP8ZL0ChtO4mQLOJZlcMsG; sessionid=xudz9865yk4z1mdebdunlw2fyq7uia2q; _ga=GA1.1.592391517.1686153182; _ga_64Z8KN7V8D=GS1.1.1686153182.1.1.1686153207.0.0.0"
+        }
+
+        a=requests.get(url,headers=h)
+        b=BeautifulSoup(a.content,"html.parser").find_all("source",{"type":"audio/mpeg"})
+
+        for i in b:
+            i=str(i).split('<source src="')[1].split('" type=')[0]
+            print(f"https://study4.com{i}")
+        print("")
+    except:
+        print("ERROR URL")
+        print("")
+
+def run():
+    url=input("URL: ")
+    link=check_url(url)
+    print("")
+    print("[RESULT]")
+    if link=="engexam":
+        engexam(url)
+        run()
+    elif link=="englishpracticetest":
+        englishpracticetest(url)
+        run()
+    elif link=="study4":
+        study4(url)
+        run()
+    else:
+        print("URL IS NOT SUPPORTED")
+run()
