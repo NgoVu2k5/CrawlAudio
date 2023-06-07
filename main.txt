@@ -64,4 +64,5 @@ def run():
         run()
     else:
         print("URL IS NOT SUPPORTED")
+        run()
 run()
